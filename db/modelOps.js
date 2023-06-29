@@ -29,17 +29,15 @@ class ModelOps {
     }
   }
 
-  saveScannedBlockNumber(chainType, number) {
+  saveScannedBlockNumber( number) {
     this.dbAccess.updateDocument(this.stateModel, {
-      chainType: chainType
     }, { chainType: chainType, scannedBlockNumber: number });
   }
 
-  syncSaveScannedBlockNumber(chainType, number) {
+  syncSaveScannedBlockNumber( number) {
     return new Promise(async (resolve, reject) => {
       try {
         await this.dbAccess.syncUpdateDocument(this.stateModel, {
-          chainType: chainType
         }, { chainType: chainType, scannedBlockNumber: number });
         resolve();
       } catch (err) {
@@ -48,9 +46,8 @@ class ModelOps {
     });
   }
 
-  getScannedBlockNumber(chainType, callback) {
+  getScannedBlockNumber( callback) {
     this.dbAccess.findDocumentOne(this.stateModel, {
-      chainType: chainType
     }, function(err, result) {
       let number = 0;
       if (!err && result !== null) {
@@ -63,7 +60,6 @@ class ModelOps {
   async getScannedBlockNumberSync(chainType) {
     try {
       let result = await this.dbAccess.syncFindDocument(this.stateModel, {
-        chainType: chainType
       });
       this.logger.debug("Synchronously getScannedBlockNumber (" + result + ")");
       let blockNumber;

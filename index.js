@@ -10,3 +10,6 @@ const Logger = require('./comm/logger.js');
 
 global.appLogger = new Logger("lendCrossAgent", "log/lendCrossAgent.log", "log/lendCrossAgent.log", global.loglevel);
 
+global.modelOps = require('./db');
+
+let { syncChain } = require('./chain');
