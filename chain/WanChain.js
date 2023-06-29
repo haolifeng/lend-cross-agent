@@ -130,6 +130,10 @@ class WanChain {
             }
         }, global.moduleConfig.promiseTimeout, "ChainType: " + chainType + ' getScEventSync timeout');
     }
+    async getTransaction(txHash) {
+        let tx = await this.client.eth.getTransaction(txHash);
+        return tx;
+    }
 
 }
 

@@ -13,3 +13,13 @@ global.appLogger = new Logger("lendCrossAgent", "log/lendCrossAgent.log", "log/l
 global.modelOps = require('./db');
 
 let { syncChain } = require('./chain');
+
+
+async function handlerMain(logger) {
+    while(1){
+        await monitorHandler(logger);
+        await sleep(global.moduleConfig.INTERVAL_TIME);
+    }
+}
+
+main();
