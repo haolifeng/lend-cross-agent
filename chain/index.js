@@ -2,13 +2,12 @@ const WanChain = require('./WanChain');
 if(!global.moduleConfig) {
     global.moduleConfig = require('../conf/moduleConfig.js');
 }
-async  function getScEvents(logger,chain, scAddr, topics, fromBlk, toBlk) {
+async function getScEvents(logger, chain, scAddr, topics, fromBlk, toBlk) {
     let events;
     let cntPerTime = 50;
-
-    try{
+    try {
         events = await chain.getScEventSync(scAddr, topics, fromBlk, toBlk);
-    }catch (err) {
+    } catch (err) {
         logger.error("getScEvents", err);
         return await Promise.reject(err);
     }
@@ -19,13 +18,81 @@ async  function getScEvents(logger,chain, scAddr, topics, fromBlk, toBlk) {
 
 
 
+    while (i < events.length) {
+        if ((i + cntPerTime) > events.length) {
+            end = events.length;
+        } else {
+            end = i + cntPerTime;
+        }
+        let arr = events.slice(i, end);
+        let multiEvents = [...arr].map((event) => {
+            return new Promise(async (resolve, reject) => {
+                if(event === null) {
+                    logger.debug("event is null")
+                    resolve();
+                }
+                try {
+                    if (!event.timestamp) {
+                        let block = await chain.getBlockByNumberSync(event.blockNumber);
+                        event.timestamp = block.timestamp;
+                    }
+                    resolve();
+                } catch (err) {
+                    reject(err);
+                }
+            });
+        });
+
+        try {
+            await Promise.all(multiEvents);
+        } catch (err) {
+            logger.error("getScEvents", err);
+            return await Promise.reject(err);
+        }
+        i += cntPerTime;
+    }
+    return events;
 }
 
 function getChain(logger, nodeUrl){
     return new WanChain(logger, nodeUrl);
 }
+async function splitEvent(chainType, events, logger) {
+    let multiEvents = [...events].map((event) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let decodeEvent = event;
 
-async function syncChain(chainType, logger, saveDb = true, syncFrom, syncTo) {
+
+                let content;
+                if (decodeEvent === null || decodeEvent === undefined) {
+                    resolve();
+                    return;
+                } else {
+                    content = decodeEvent;
+                }
+
+                if (content !== null) {
+
+                    await global.modelOps.syncSave(...content);
+                }
+                resolve();
+            } catch (err) {
+                reject(err);
+            }
+        });
+    });
+
+    try {
+        await Promise.all(multiEvents);
+        logger.debug("********************************** splitEvent done **********************************", chainType);
+    } catch (err) {
+        logger.error("splitEvent", err);
+        return await Promise.reject(err);
+    }
+}
+async function syncChain(logger, saveDb = true, syncFrom, syncTo) {
+    const chainType = "WAN";
     logger.info("********************************** syncChain **********************************", chainType);
 
     let blockNumber = 0;
@@ -51,10 +118,7 @@ async function syncChain(chainType, logger, saveDb = true, syncFrom, syncTo) {
             //if (blockNumber > chain.safe_block_num && !global.storemanRestart) {
             if (blockNumber > chain.safe_block_num) {
                 blockNumber -= chain.safe_block_num;
-                if (['XRP', 'DOT'].includes(chainType) && blockNumber < curBlock - chain.trace_block_num) {
-                    // if (blockNumber < curBlock - chain.trace_block_num) {
-                    blockNumber = (curBlock > chain.trace_block_num) ? curBlock - chain.trace_block_num : 0;
-                }
+
             } else {
                 // blockNumber = global.moduleConfig.startSyncBlockNum[chainType];
                 blockNumber = (curBlock > chain.trace_block_num) ? curBlock - chain.trace_block_num : 0;
@@ -66,23 +130,9 @@ async function syncChain(chainType, logger, saveDb = true, syncFrom, syncTo) {
 
         let cur = Date.now();
         // only update blockNumber before 2021/10/15 00:00:00 for DOT
-        if(chainType==='DOT' && global.storemanRestart && cur < 1634227200000) {
-            // blockNumber = 5805050 ; //TODO: delete this line  5805910
-            // blockNumber = 5865663 ; //TODO: delete this line
-            blockNumber = 7229600;
-        }
-
-        if(chainType==='ARB' && global.testnet && global.storemanRestart && cur < 1662566400000) {
-            blockNumber = 251480;
-        }
-
-        if(chainType==='ETH' && global.testnet && global.storemanRestart && cur < 1662566400000) {
+      /*  if(chainType==='WAN' && global.testnet && global.storemanRestart && cur < 1662566400000) {
             blockNumber = 7545020;
-        }
-
-        if(chainType==='OPT' && global.testnet && global.storemanRestart && cur < 1663065846000) {
-            blockNumber = 31950;
-        }
+        }*/
     } else {
         syncFrom = parseInt(syncFrom, 10);
         blockNumber = syncFrom;
@@ -116,32 +166,22 @@ async function syncChain(chainType, logger, saveDb = true, syncFrom, syncTo) {
                     }
 
                     // let contracts = global.moduleConfig.crossInfoDict[chainType].CONTRACT;
-                    logger.info("syncChain::blockSync chain ", chainType, "saveDb ", saveDb, "range: From", from, " to", to, " remain ", range, ", current round FromBlk:", blkIndex, ", ToBlk:", blkEnd, " while global.configMutex is", global.configMutex);
+                    logger.info("syncChain::blockSync chain ", chainType, "saveDb ", saveDb, "range: From", from, " to", to, " remain ", range, ", current round FromBlk:", blkIndex, ", ToBlk:", blkEnd);
                     // let scAddr = contracts.crossScAddr;
-                    let scAddr= [].concat(global.tokenList[chainType].crossScAddr);
+                    let scAddr= global.moduleConfig.scAddrs;
 
-                    while (global.configMutex && saveDb) {
-                        await sleep(1000);
+
+                    for (let scAddress of scAddr) {
+                        let scEvents = await getScEvents(logger, chain, scAddress, topics, blkIndex, blkEnd);
+                        events = events.concat(scEvents);
                     }
 
-                    if(chain.matchAllScAddressPerScan) {
-                        events = await getScEvents(logger, chain, scAddr, topics, blkIndex, blkEnd);
-                    }
-                    else {
-                        for (let scAddress of scAddr) {
-                            let scEvents = await getScEvents(logger, chain, scAddress, topics, blkIndex, blkEnd);
-                            events = events.concat(scEvents);
-                        }
-                    }
 
                     logger.info("syncChain::events chainType %s saveDb %s length %s", chainType, saveDb, events.length);
                     if (events.length > 0) {
                         await splitEvent(chainType, events, logger);
                     }
-                    if(chainType === "ADA") {
-                        let adaAgent = new global.agentDict[chainType]();
-                        adaAgent.tryMerageUtxo();
-                    }
+
                     events = [];
                     if (saveDb) {
                         await global.modelOps.syncSaveScannedBlockNumber(chainType, blkEnd);

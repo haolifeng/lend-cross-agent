@@ -15,7 +15,8 @@ let config = {
         TRACE_BLOCK_NUM: 100000,
         SYNC_INTERVAL_BLOCK_NUM: 2000,
         SYNC_INTERVAL_TIME: 5 * 1000,
-    }
+    },
+    scAddrs:[]
 }
 
 module.exports = config;

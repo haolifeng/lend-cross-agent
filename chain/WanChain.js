@@ -31,7 +31,30 @@ class WanChain {
         this.trace_block_num = global.moduleConfig.chain.TRACE_BLOCK_NUM;
         this.sync_interval_block_num = global.moduleConfig.chain.SYNC_INTERVAL_BLOCK_NUM;
     }
+    getBlockByNumber(blockNumber, callback) {
+        this.client.eth.getBlock(blockNumber, callback);
+    }
+    getBlockByNumberSync(blockNumber) {
+        // let log = this.log;
+        let self = this;
+        let client = this.client;
+        let chainType = this.chainType;
 
+        return new TimeoutPromise(function (resolve, reject) {
+            try {
+                self.getBlockByNumber(blockNumber, function(err, result) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        // log.debug("ChainType:", chainType, 'getBlockByNumberSync successfully with result: ', result);
+                        resolve(result);
+                    }
+                });
+            } catch (err) {
+                reject(err);
+            }
+        }, global.moduleConfig.promiseTimeout, "ChainType: " + chainType + ' getBlockByNumberSync timeout');
+    }
     getBlockNumberSync() {
         let log = this.log;
         let client = this.client;
