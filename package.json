@@ -18,7 +18,11 @@
   },
   "homepage": "https://github.com/haolifeng/js-lendCross-agent#readme",
   "dependencies": {
-    "mongoose": "^6.0.0",
-    "web3": "^1.10.0"
+    "mongoose": "^5.0.0",
+    "optimist": "^0.6.1",
+    "web3": "^1.10.0",
+    "winston": "^3.3.3",
+    "winston-daily-rotate-file": "^3.3.2",
+    "winston-syslog": "^2.4.4"
   }
 }
