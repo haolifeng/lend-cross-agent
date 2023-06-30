@@ -30,6 +30,13 @@ function sleep(time) {
     })
 }
 
+function getWAnChain(){
+    return
+}
+function getWeb3Obj(chainType){
+
+}
+
 module.exports = {
     sleep,
     hexAdd0x,

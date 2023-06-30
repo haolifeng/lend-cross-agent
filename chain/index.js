@@ -1,4 +1,5 @@
 const WanChain = require('./WanChain');
+const Web3Obj = require('./Web3Obj')
 if(!global.moduleConfig) {
     global.moduleConfig = require('../conf/moduleConfig.js');
 }
@@ -54,8 +55,12 @@ async function getScEvents(logger, chain, scAddr, topics, fromBlk, toBlk) {
     return events;
 }
 
-function getChain(logger, nodeUrl){
-    return new WanChain(logger, nodeUrl);
+function getWanChain(){
+    return new WanChain(global.appLogger, global.moduleConfig.chain.nodeUrl);
+}
+function getWeb3Obj(chainType){
+    let chainConfig = global.moduleConfig.crossInfoDict[chainType];
+
 }
 async function splitEvent(chainType, events, logger) {
     let multiEvents = [...events].map((event) => {
@@ -202,5 +207,5 @@ async function syncChain(logger, saveDb = true, syncFrom, syncTo) {
 }
 
 module.exports = {
-    syncChain
+    syncChain,getWanChain,
 }

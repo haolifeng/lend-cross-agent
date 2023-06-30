@@ -20,6 +20,7 @@
   "dependencies": {
     "mongoose": "^5.0.0",
     "optimist": "^0.6.1",
+    "wanchain-util": "^1.2.0",
     "web3": "^1.10.0",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^3.3.2",
