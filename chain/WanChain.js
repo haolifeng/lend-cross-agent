@@ -131,8 +131,13 @@ class WanChain {
         }, global.moduleConfig.promiseTimeout, "ChainType: " + chainType + ' getScEventSync timeout');
     }
     async getTransaction(txHash) {
-        let tx = await this.client.eth.getTransaction(txHash);
-        return tx;
+        try {
+            let tx = await this.client.eth.getTransaction(txHash);
+            return tx;
+        }catch (e) {
+            this.log.error('WanChain, getTransaction e: ', e);
+        }
+
     }
 
 }
