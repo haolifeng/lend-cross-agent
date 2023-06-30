@@ -24,6 +24,12 @@ class WanAgent {
         this.chain = getGlobalWanChain();
 
     }
+    async getDecodeEventDbData(decodeEvent) {
+        let content = {}
+
+        return content;
+
+    }
 }
 
 module.exports = WanAgent;

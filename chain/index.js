@@ -1,5 +1,6 @@
 const WanChain = require('./WanChain');
-const Web3Obj = require('./Web3Obj')
+const Web3Obj = require('./Web3Obj');
+const WanAgent = require('../agent/WanAgent');
 if(!global.moduleConfig) {
     global.moduleConfig = require('../conf/moduleConfig.js');
 }
@@ -68,55 +69,21 @@ async function splitEvent( events, logger) {
     let multiEvents = [...events].map((event) => {
         return new Promise(async (resolve, reject) => {
             try {
-                let crossAgent = new ();
+                let wanAgent = new WanAgent();
 
-                let decodeEvent;
-                if (crossAgent.contract) {
-                    decodeEvent = crossAgent.contract.parseEvent(event);
-                } else {
-                    decodeEvent = event;
-                }
+                let decodeEvent = wanAgent.contract.parseEvent(event);
+
+
 
                 let content;
                 if (decodeEvent === null || decodeEvent === undefined) {
                     resolve();
                     return;
                 } else {
-                    content = await crossAgent.getDecodeEventDbData(decodeEvent);
+                    content = await wanAgent.getDecodeEventDbData(decodeEvent);
                 }
 
                 if (content !== null) {
-                    if(content[1].hasOwnProperty("walletRevokeEvent")) {
-                        let option = {
-                            hashX : content[0]
-                        };
-                        let result = await global.modelOps.getEventHistory(option);
-                        if (result.length === 0) {
-                            resolve();
-                            return;
-                        }
-                    } else if (content[1].hasOwnProperty("withdrawFeeEvent")) {
-                        let option = {
-                            "withdrawFeeTxHash": content[0]
-                        };
-                        let result = await global.modelOps.getEventHistory(option);
-                        if (result.length === 0) {
-                            resolve();
-                            return;
-                        } else {
-                            content = [result[0].hashX, content[1]];
-                        }
-                    }
-                    if (crossAgent.chain.checkIrreversible) {
-                        let irreversible = await crossAgent.chain.checkTransIrreversibleSync(decodeEvent.transactionHash);
-                        if (irreversible) {
-                            logger.debug("The txHash %s is irreversible for record %s, this trans will be saved!", decodeEvent.transactionHash, content[0]);
-                        } else {
-                            logger.debug("The txHash %s still is not irreversible or executed for record %s", decodeEvent.transactionHash, content[0]);
-                            resolve();
-                            return;
-                        }
-                    }
                     await global.modelOps.syncSave(...content);
                 }
                 resolve();
