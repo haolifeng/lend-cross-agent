@@ -16,7 +16,15 @@ let config = {
         SYNC_INTERVAL_BLOCK_NUM: 2000,
         SYNC_INTERVAL_TIME: 5 * 1000,
     },
-    scAddrs:[]
+    scAddrs:[],
+    crossInfoDict:{
+        ETH: {
+                "nodeUrl": "https://nodes-testnet.wandevs.org/eth",
+                "chainID": "2147483708",
+                "transChainID": "5"
+            },
+
+    }
 }
 
 module.exports = config;
