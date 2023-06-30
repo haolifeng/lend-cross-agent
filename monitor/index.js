@@ -2,6 +2,8 @@
 global.handlingList = {};
 function monitorRecord(record, logger) {
 
+
+
 }
 async function monitorHandler(logger) {
 
