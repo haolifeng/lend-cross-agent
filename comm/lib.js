@@ -1,4 +1,6 @@
 const BigNumber = require('bignumber.js');
+
+const {getWanChain} = require('../chain');
 function hexTrip0x(hexs) {
     if (0 == hexs.indexOf('0x')) {
         return hexs.slice(2);
@@ -30,11 +32,9 @@ function sleep(time) {
     })
 }
 
-function getWAnChain(){
-    return
-}
-function getWeb3Obj(chainType){
-
+function getGlobalWanChain(){
+     global.WanChain = getWanChain();
+     return global.WanChain;
 }
 
 module.exports = {
@@ -42,4 +42,5 @@ module.exports = {
     hexAdd0x,
     hexTrip0x,
     toBigNumber,
+    getGlobalWanChain,
 }

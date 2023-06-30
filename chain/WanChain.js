@@ -140,6 +140,7 @@ class WanChain {
 
     }
 
+
 }
 
 module.exports = WanChain;
