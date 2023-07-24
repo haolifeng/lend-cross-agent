@@ -24,8 +24,20 @@ class WanAgent {
         this.chain = getGlobalWanChain();
 
     }
+    getDecodeCrossHashX(args) {
+        if (!args.xHash && args.x) {
+            args.xHash = sha256(args.x);
+            return args;
+        } else {
+            return args;
+        }
+    }
     async getDecodeEventDbData(decodeEvent) {
         let content = {}
+        let toScAddr = [global.moduleConfig.crossLendScAddr.CrossLendMint, global.moduleConfig.crossLendScAddr.CrossLendRepay];
+        let args = this.getDecodeCrossHashX(decodeEvent.args);
+        let eventName = decodeEvent.event;
+
 
         return content;
 

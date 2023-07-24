@@ -28,7 +28,9 @@ let config = {
         configurationScAddr: '0x47bE7cC7c13315Fdd1bbf3dBaB512AF23961Ba53',
         configurationScAbi: require('../abi/abi.ConfigurationDelegate.json')
     },
-    scAddrs:[],
+    crossLendScAddr:{
+
+    },
     crossInfoDict:{
         ETH: {
             "nodeUrl": "https://nodes.wandevs.org/eth",

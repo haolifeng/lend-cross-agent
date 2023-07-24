@@ -31,7 +31,13 @@ let config = {
         configurationScAddr: '0x7F06174214F037588126962cfDA6fD7FF4455B07',
         configurationScAbi: require('../abi/abi.CrossConfig.json')
     },
-    scAddrs:[],
+    crossLendScAddr:{
+        "CrossLendMint": "0x8ca16D5B3ba53F583230B24aAdf036eb7BfdAD4F",
+        "CrossLendRepay": "0xeAAb6e905fF72B72652dA139af710ABd3118c361",
+        "Type0TxParser": "0x22bb4E92D51d2dC9388245B1D1EA7b42A84F8279",
+        "Type1TxParser": "0x6A2bC205E07456a95cCFFD7D01c7681cf10D8118",
+        "Type2TxParser": "0x26FA14e78C82ecA49531c2C6A7fB42426C308cc5"
+    },
     crossInfoDict:{
         ETH: {
                 "nodeUrl": "https://nodes-testnet.wandevs.org/eth",
