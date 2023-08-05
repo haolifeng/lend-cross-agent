@@ -21,5 +21,14 @@ async function handlerMain(logger) {
         await sleep(global.moduleConfig.INTERVAL_TIME);
     }
 }
+async function  main(){
+    try{
+        syncChain(global.appLogger);
+        handlerMain(global.appLogger);
+    }catch (e) {
+        global.appLogger.error("main start,e: ", e);
+        process.exit(0);
+    }
 
+}
 main();
