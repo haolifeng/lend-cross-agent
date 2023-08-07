@@ -50,7 +50,7 @@ class Logger {
       levels: winston.config.syslog.levels,
       level: level,
       format: winston.format(function(info, opts) {
-        let prefix = util.format('%s %s %s %s', "storeman" + global.argv.waddress, moment().format('YYYY-MM-DD HH:mm:ss,SSS').trim(), name, info.level.toUpperCase());
+        let prefix = util.format('%s %s %s', moment().format('YYYY-MM-DD HH:mm:ss,SSS').trim(), name, info.level.toUpperCase());
         if (info[SPLAT]) {
           info[MESSAGE] = util.format('%s %s', prefix, util.format(info.message, ...info[SPLAT]));
         } else {
@@ -79,9 +79,9 @@ class Logger {
           filename: this.filePath,
           level: level,
           datePattern: 'YYYY-MM-DD',
-          zippedArchive: (global.testnet || global.isLeader) ? false : true,
+          zippedArchive: (global.testnet) ? false : true,
           maxSize: '50m',
-          maxFiles: (global.testnet || global.isLeader) ? '30d' : '10d'
+          maxFiles: (global.testnet) ? '30d' : '10d'
         })
       ],
       // exceptionHandlers: [

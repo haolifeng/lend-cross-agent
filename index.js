@@ -24,7 +24,7 @@ async function handlerMain(logger) {
 async function  main(){
     try{
         syncChain(global.appLogger);
-        handlerMain(global.appLogger);
+        //handlerMain(global.appLogger);
     }catch (e) {
         global.appLogger.error("main start,e: ", e);
         process.exit(0);

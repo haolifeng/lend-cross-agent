@@ -3,7 +3,7 @@
 const solc = require('solc');
 let Web3 = require('web3');
 let web3 = new Web3(null);
-let SolidityEvent = require("web3/lib/web3/event.js");
+
 let SolidityFunction = require("web3/lib/web3/function.js");
 let wanUtil = require('wanchain-util');
 const web3EthAbi = require("web3-eth-abi");

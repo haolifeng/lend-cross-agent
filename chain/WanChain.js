@@ -1,8 +1,9 @@
 if(!global.moduleConfig) {
     global.moduleConfig = require('../conf/moduleConfig.js');
 }
-
+const TimeoutPromise = require('../utils/timeoutPromise.js')
 const Web3 = require('web3');
+const Web3_v2 = require('web3_1.2');
 
 function sleep(time) {
     return new Promise(function(resolve, reject) {
@@ -21,7 +22,7 @@ class WanChain {
         this.client = this.getClient(nodeUrl);
     }
     getClient(nodeUrl){
-        return new Web3(new Web3.providers.HttpProvider(nodeUrl));
+        return new Web3_v2(new Web3.providers.HttpProvider(nodeUrl));
     }
 
     getConfig() {
@@ -114,6 +115,7 @@ class WanChain {
         // let times = 0;
 
         return new TimeoutPromise(async function (resolve, reject) {
+
             let filterValue = {
                 fromBlock: fromBlk,
                 toBlock: toBlk,

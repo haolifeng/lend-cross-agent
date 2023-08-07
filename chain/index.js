@@ -107,7 +107,7 @@ async function syncChain(logger, saveDb = true, syncFrom, syncTo) {
 
     let blockNumber = 0;
     let curBlock = 0;
-    let chain =  getChain(logger,global.moduleConfig.chain.nodeUrl );
+    let chain =  new WanChain(logger,global.moduleConfig.chain.nodeUrl );
 
     if (!syncTo) {
         try {
