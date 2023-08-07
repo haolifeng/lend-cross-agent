@@ -19,7 +19,7 @@ async function getScEvents(logger, chain, scAddr, topics, fromBlk, toBlk) {
     logger.info("events length: ", chain.chainType, events.length);
 
 
-
+    //set timestamp for per event
     while (i < events.length) {
         if ((i + cntPerTime) > events.length) {
             end = events.length;
