@@ -178,15 +178,10 @@ async function syncChain(logger, saveDb = true, syncFrom, syncTo) {
                     // let contracts = global.moduleConfig.crossInfoDict[chainType].CONTRACT;
                     logger.info("syncChain::blockSync chain ", chainType, "saveDb ", saveDb, "range: From", from, " to", to, " remain ", range, ", current round FromBlk:", blkIndex, ", ToBlk:", blkEnd);
                     // let scAddr = contracts.crossScAddr;
-                    let scAddr= global.moduleConfig.CONTRACT.crossScAddr;
+                    let scAddress= global.moduleConfig.CONTRACT.crossScAddr;
 
-
-                    for (let scAddress of scAddr) {
-                        let scEvents = await getScEvents(logger, chain, scAddress, topics, blkIndex, blkEnd);
-                        events = events.concat(scEvents);
-                    }
-
-
+                    let scEvents = await getScEvents(logger, chain, scAddress, topics, blkIndex, blkEnd);
+                    events = events.concat(scEvents);
                     logger.info("syncChain::events chainType %s saveDb %s length %s", chainType, saveDb, events.length);
                     if (events.length > 0) {
                         await splitEvent(chainType, events, logger);
