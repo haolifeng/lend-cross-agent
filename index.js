@@ -13,6 +13,11 @@ global.appLogger = new Logger("lendCrossAgent", "log/lendCrossAgent.log", "log/l
 global.modelOps = require('./db');
 
 let { syncChain } = require('./chain');
+const {global} = require("web3/lib/web3/namereg");
+
+const {
+    sleep
+} = require('./comm/lib')
 
 
 async function handlerMain(logger) {
@@ -21,9 +26,16 @@ async function handlerMain(logger) {
         await sleep(global.moduleConfig.INTERVAL_TIME);
     }
 }
+async function syncWanChain(logger){
+    const chainType = "WAN";
+    while(1){
+        await syncChain(logger);
+        await sleep(global.moduleConfig.INTERVAL_TIME);
+    }
+}
 async function  main(){
     try{
-        syncChain(global.appLogger);
+        syncWanChain(global.appLogger);
         //handlerMain(global.appLogger);
     }catch (e) {
         global.appLogger.error("main start,e: ", e);

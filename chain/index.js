@@ -130,7 +130,7 @@ async function syncChain(logger, saveDb = true, syncFrom, syncTo) {
                 blockNumber -= chain.safe_block_num;
 
             } else {
-                // blockNumber = global.moduleConfig.startSyncBlockNum[chainType];
+                //if begin scan block, the from last block trace_block_numbe
                 blockNumber = (curBlock > chain.trace_block_num) ? curBlock - chain.trace_block_num : 0;
             }
         } catch (err) {
@@ -138,16 +138,11 @@ async function syncChain(logger, saveDb = true, syncFrom, syncTo) {
             return;
         }
 
-        let cur = Date.now();
-        // only update blockNumber before 2021/10/15 00:00:00 for DOT
-      /*  if(chainType==='WAN' && global.testnet && global.storemanRestart && cur < 1662566400000) {
-            blockNumber = 7545020;
-        }*/
+
     } else {
         syncFrom = parseInt(syncFrom, 10);
         blockNumber = syncFrom;
     }
-
 
     logger.info("syncChain::Current Chain %s sync will start from block: %s, saveDb: %s", chainType, blockNumber, saveDb);
 
