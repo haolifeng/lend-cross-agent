@@ -39,13 +39,15 @@ class WanAgent {
         return decodeEvent.args.userAccount;
     }
     async getPairInfo(tokenPairID) {
-
-        let tokenPair  = this.chain.getTokenPair(tokenPairID);
+         this.logger.debug("WanAgent -- getPairInfo, tokenPairID ", tokenPairID);
+        let tokenPair  = await this.chain.getTokenPair(tokenPairID);
+        this.logger.debug('wanAgent -- getPairInfo, tokenPair: ', tokenPair);
         if (tokenPair.fromAccount && tokenPair.toAccount) {
             tokenPair.ancestorChainSymbol = (await getChainSymbolByChainId(tokenPair.ancestorChainID));
             tokenPair.fromChainSymbol = (await getChainSymbolByChainId(tokenPair.fromChainID));
             tokenPair.toChainSymbol = (await getChainSymbolByChainId(tokenPair.toChainID));
         }
+        return tokenPair;
     }
     async getDecodeEventDbData(decodeEvent) {
 
@@ -58,17 +60,25 @@ class WanAgent {
 
         let wanEvents = global.moduleConfig.wanEvents;
         if(wanEvents.includes(eventName)){
-            let userAccount = decodeEvent.args.userAccount;
-            if(userAccount === global.moduleConfig.crossLendScAddr.CrossLendMint || userAccount === global.moduleConfig.crossLendScAddr.CrossLendRepay){
+            let userAccount = decodeEvent.args.userAccount.toLowerCase();
+            console.log('userAccount: ', userAccount);
+            console.log(global.moduleConfig.crossLendScAddr.CrossLendMint.toLowerCase())
+            console.log(global.moduleConfig.crossLendScAddr.CrossLendRepay.toLowerCase())
+
+            if(userAccount === global.moduleConfig.crossLendScAddr.CrossLendMint.toLowerCase() || userAccount === global.moduleConfig.crossLendScAddr.CrossLendRepay.toLowerCase()){
                 let tokenPairID = Number(args.tokenPairID);
+                console.log('tokenPairID: ', tokenPairID);
                 let tokenPair = await this.getPairInfo(tokenPairID);
-                console.log('tokenPair is : ', tokenPair);
+                console.log('tokenPair is   haolifeng ---- 2000  : ', tokenPair);
                 content = {
+                    hashX: args.uniqueID,
                     crossAddress: this.getDecodeCrossAddress(decodeEvent),
                     toHtlcAddr: this.getDecodeEventToHtlcAddr(decodeEvent),
                     tokenAddr: args.tokenAccount.toLowerCase(),
                     tokenPairID: tokenPairID,
                 }
+
+
             }
         }
 
@@ -81,6 +91,7 @@ class WanAgent {
         }
 
         this.logger.debug("********************************** 0: getDecodeEventDbData ********************************** eventName:", eventName, decodeEvent.transactionHash);
+        this.logger.debug('***********************************1: getDecodeEventDbData ********************************** content: ', content);
         return content;
 
     }

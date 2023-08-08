@@ -151,6 +151,7 @@ class WanChain {
         return new TimeoutPromise(async (resolve, reject) => {
             try {
                 let tokenPair = await self.getTokenPairInfo(pairId);
+                self.log.debug(('haolifeng 30000 --- in wanchain getTokenPair:  ', tokenPair));
                 let pairAncestorInfo = await self.getTokenPairAncestorInfo(pairId);
 
                 tokenPair.ancestorAccount = pairAncestorInfo.account;
@@ -168,11 +169,12 @@ class WanChain {
         }, global.moduleConfig.promiseTimeout, "ChainType: " + self.chainType + ' getTokenPairInfo timeout');
     }
     getSolInterfaceV2(abi, contractAddr, contractFunc) {
-        let clientV2 = this.getClientV2(this.nodeUrl);
+        let clientV2 = this.getClient(this.nodeUrl);
         let contract = new clientV2.eth.Contract(abi, contractAddr);
         return contract.methods[contractFunc];
     }
     getTokenPairInfo(pairId) {
+        this.log.debug("WanChain getTokenPairInfo: pairId: ", pairId);
         let self = this;
         let contractAbi = global.moduleConfig.CONTRACT.tokenManagerAbi;
         let contractAddr = global.moduleConfig.CONTRACT.tokenManagerAddr;
@@ -180,7 +182,9 @@ class WanChain {
 
         return new TimeoutPromise((resolve, reject) => {
             let func = self.getSolInterfaceV2(contractAbi, contractAddr, scFunc);
+
             func(pairId).call((err, result) => {
+                //console.log('haolifeng result: ', JSON.stringify(result));
                 if (err) {
                     return reject(err);
                 } else {
