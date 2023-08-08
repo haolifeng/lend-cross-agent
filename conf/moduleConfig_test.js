@@ -16,6 +16,12 @@ let config = {
         SYNC_INTERVAL_BLOCK_NUM: 2000,
         SYNC_INTERVAL_TIME: 5 * 1000,
     },
+    wanEvents:[
+        "SmgMintLogger", "SmgReleaseLogger"
+    ],
+    inputType:{
+            "userLock":1,"userBurn":2
+    },
     CONTRACT: {
         crossControlScAddr: '0x8c70c8dFEb272C725b52f4374e3931589cAAB01E',
         crossControlScAbi: require('../abi/abi.CrossControlDelegate.json'),

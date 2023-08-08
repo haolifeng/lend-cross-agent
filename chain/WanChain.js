@@ -146,6 +146,95 @@ class WanChain {
 
     }
 
+    async getTokenPair(pairId) {
+        let self = this;
+        return new TimeoutPromise(async (resolve, reject) => {
+            try {
+                let tokenPair = await self.getTokenPairInfo(pairId);
+                let pairAncestorInfo = await self.getTokenPairAncestorInfo(pairId);
+
+                tokenPair.ancestorAccount = pairAncestorInfo.account;
+                tokenPair.ancestorName = pairAncestorInfo.name;
+                tokenPair.ancestorSymbol = pairAncestorInfo.symbol;
+                tokenPair.ancestorDecimals = pairAncestorInfo.decimals;
+                tokenPair.ancestorChainID = pairAncestorInfo.chainId.toString();
+                tokenPair.fromChainID = tokenPair.fromChainID.toString();
+                tokenPair.toChainID = tokenPair.toChainID.toString();
+                tokenPair.tokenCrossType = await self.getTokenCrossType(pairId);
+                resolve(tokenPair);
+            } catch (err) {
+                return reject(err);
+            }
+        }, global.moduleConfig.promiseTimeout, "ChainType: " + self.chainType + ' getTokenPairInfo timeout');
+    }
+    getSolInterfaceV2(abi, contractAddr, contractFunc) {
+        let clientV2 = this.getClientV2(this.nodeUrl);
+        let contract = new clientV2.eth.Contract(abi, contractAddr);
+        return contract.methods[contractFunc];
+    }
+    getTokenPairInfo(pairId) {
+        let self = this;
+        let contractAbi = global.moduleConfig.CONTRACT.tokenManagerAbi;
+        let contractAddr = global.moduleConfig.CONTRACT.tokenManagerAddr;
+        let scFunc = 'getTokenPairInfo';
+
+        return new TimeoutPromise((resolve, reject) => {
+            let func = self.getSolInterfaceV2(contractAbi, contractAddr, scFunc);
+            func(pairId).call((err, result) => {
+                if (err) {
+                    return reject(err);
+                } else {
+                    if (result && Object.keys(result).length) {
+                        let length = Object.keys(result).length / 2;
+                        for (let i = 0; i < length; i++) {
+                            delete result[i.toString()];
+                        }
+                    }
+                    return resolve(result);
+                }
+            });
+        }, global.moduleConfig.promiseTimeout, "ChainType: " + self.chainType + ' getTokenPairInfo timeout');
+    }
+    getTokenPairAncestorInfo(pairId) {
+        let self = this;
+        let contractAbi = global.moduleConfig.CONTRACT.tokenManagerAbi;
+        let contractAddr = global.moduleConfig.CONTRACT.tokenManagerAddr;
+        let scFunc = 'getAncestorInfo';
+
+        return new TimeoutPromise((resolve, reject) => {
+            let func = self.getSolInterfaceV2(contractAbi, contractAddr, scFunc);
+            func(pairId).call((err, result) => {
+                if (err) {
+                    return reject(err);
+                } else {
+                    if (result && Object.keys(result).length) {
+                        let length = Object.keys(result).length / 2;
+                        for (let i = 0; i < length; i++) {
+                            delete result[i.toString()];
+                        }
+                    }
+                    return resolve(result);
+                }
+            });
+        }, global.moduleConfig.promiseTimeout, "ChainType: " + self.chainType + ' getTokenPairAncestorInfo timeout');
+    }
+    getTokenCrossType(pairId) {
+        let self = this;
+        let contractAbi = global.moduleConfig.CONTRACT.tokenManagerAbi;
+        let contractAddr = global.moduleConfig.CONTRACT.tokenManagerAddr;
+        let scFunc = 'mapTokenPairType';
+
+        return new TimeoutPromise((resolve, reject) => {
+            let func = self.getSolInterfaceV2(contractAbi, contractAddr, scFunc);
+            func(pairId).call((err, result) => {
+                if (err) {
+                    return reject(err);
+                } else {
+                    return resolve(parseInt(result));
+                }
+            });
+        }, global.moduleConfig.promiseTimeout, "ChainType: " + self.chainType + ' getTokenCrossType timeout');
+    }
 
 }
 

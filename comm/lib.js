@@ -1,6 +1,13 @@
 const BigNumber = require('bignumber.js');
+let chainConstants = require('bip44-constants')
 
-
+function getChainSymbolByChainId(chainId) {
+    let chainInfo = chainConstants.filter(item => item[0] === Number(chainId));
+    if (chainInfo.length === 0) {
+        return undefined;
+    }
+    return (chainInfo[0][1] === 'BNB') ? 'BSC' : chainInfo[0][1];
+}
 function hexTrip0x(hexs) {
     if (0 == hexs.indexOf('0x')) {
         return hexs.slice(2);
@@ -42,4 +49,5 @@ module.exports = {
     hexTrip0x,
     toBigNumber,
     getGlobalWanChain,
+    getChainSymbolByChainId
 }
