@@ -33,12 +33,23 @@ class WanAgent {
         }
     }
     async getDecodeEventDbData(decodeEvent) {
+
+        console.log('decodeEvent: ', decodeEvent);
+
         let content = {}
         let toScAddr = [global.moduleConfig.crossLendScAddr.CrossLendMint, global.moduleConfig.crossLendScAddr.CrossLendRepay];
         let args = this.getDecodeCrossHashX(decodeEvent.args);
         let eventName = decodeEvent.event;
 
+        function compare(p) {
+            return function (m, n) {
+                var a = m[p];
+                var b = n[p];
+                return b - a;
+            }
+        }
 
+        this.logger.debug("********************************** 0: getDecodeEventDbData ********************************** eventName:", eventName, decodeEvent.transactionHash);
         return content;
 
     }
