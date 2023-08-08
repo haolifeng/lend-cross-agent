@@ -1,5 +1,10 @@
 
 const { getWeb3Obj } = require('../chain');
+const HandlerTxType2 = require('./handlerTxType2');
+const HandlerTxType1 = require('./handlerTxType1');
+const HandlerTxType0 = require('./handlerTxType0');
+
+const admin = require('../wallets')
 global.handlingList = {};
 async function monitorRecord(record, logger) {
     const fromChainType = record.crossFromChainSymobl;
@@ -13,6 +18,7 @@ async function monitorRecord(record, logger) {
     }
 
     const txType = txInfo.type;
+    let ret;
     switch (txType) {
         case 0:
             console.log('type0 ')
@@ -20,6 +26,11 @@ async function monitorRecord(record, logger) {
             console.log('type1')
         case 2:
             console.log('type2')
+            let handler = new HandlerTxType2(record, txInfo, logger);
+            ret = await handler.handler(admin);
+            if(ret && ret.status === 1){
+
+            }
 
         default:
             logger.info('the txtype is not support, txType: ', txType);
