@@ -61,7 +61,8 @@ class WanAgent {
             let userAccount = decodeEvent.args.userAccount;
             if(userAccount === global.moduleConfig.crossLendScAddr.CrossLendMint || userAccount === global.moduleConfig.crossLendScAddr.CrossLendRepay){
                 let tokenPairID = Number(args.tokenPairID);
-
+                let tokenPair = await this.getPairInfo(tokenPairID);
+                console.log('tokenPair is : ', tokenPair);
                 content = {
                     crossAddress: this.getDecodeCrossAddress(decodeEvent),
                     toHtlcAddr: this.getDecodeEventToHtlcAddr(decodeEvent),
