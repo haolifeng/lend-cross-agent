@@ -12,11 +12,13 @@ global.appLogger = new Logger("lendCrossAgent", "log/lendCrossAgent.log", "log/l
 
 global.modelOps = require('./db');
 
-let { syncChain } = require('./chain');
+let {initWanChain, syncChain } = require('./chain');
 
+initWanChain();
 
 const {
-    sleep,getGlobalWanChain
+    sleep,
+    getGlobalWanChain
 } = require('./comm/lib')
 
 
@@ -35,6 +37,7 @@ async function syncWanChain(logger){
 }
 async function  main(){
     try{
+
         syncWanChain(global.appLogger);
         //handlerMain(global.appLogger);
     }catch (e) {

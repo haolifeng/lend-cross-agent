@@ -4,6 +4,9 @@ const WanAgent = require('../agent/WanAgent');
 if(!global.moduleConfig) {
     global.moduleConfig = require('../conf/moduleConfig.js');
 }
+function initWanChain(){
+    global.wanChain =  new WanChain(global.appLogger,global.moduleConfig.chain.nodeUrl );
+}
 async function getScEvents(logger, chain, scAddr, topics, fromBlk, toBlk) {
     let events;
     let cntPerTime = 50;
@@ -57,7 +60,7 @@ async function getScEvents(logger, chain, scAddr, topics, fromBlk, toBlk) {
 }
 
 function getWanChain(){
-    return new WanChain(global.appLogger, global.moduleConfig.chain.nodeUrl);
+    return global.wanChain;
 }
 function getWeb3Obj(chainType){
     chainType = chainType.toUpperCase();
@@ -107,7 +110,7 @@ async function syncChain(logger, saveDb = true, syncFrom, syncTo) {
 
     let blockNumber = 0;
     let curBlock = 0;
-    let chain =  new WanChain(logger,global.moduleConfig.chain.nodeUrl );
+    let chain =  getWanChain();
 
     if (!syncTo) {
         try {
@@ -201,6 +204,8 @@ async function syncChain(logger, saveDb = true, syncFrom, syncTo) {
     }
 }
 
-module.exports = {
-    syncChain,getWanChain,getWeb3Obj
-}
+
+exports.initWanChain = initWanChain;
+exports.getWanChain = getWanChain;
+exports.syncChain = syncChain;
+exports.getWeb3Obj = getWeb3Obj
