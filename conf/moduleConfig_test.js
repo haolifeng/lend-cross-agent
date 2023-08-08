@@ -51,6 +51,16 @@ let config = {
                 "chainID": "2147483708",
                 "transChainID": "5"
             },
+        AVAX:{
+            "nodeUrl": "https://api.avax-test.network/ext/bc/C/rpc",
+            "chainID": "2147492648",
+            "transChainID": "43113"
+        },
+        MOONBEAM:{
+            "nodeUrl": "https://moonbeam-alpha.api.onfinality.io/public",
+            "chainID": "1073741825",
+            "transChainID": "1287"
+        }
 
     }
 }

@@ -62,6 +62,13 @@ const eventSchema = new Schema({
     timestamp:{
         type: Number
     },
+    status: {
+        type: String,
+        default: 'init'
+        /*
+            init finished
+        */
+    },
 }, {
     collection: 'event'
 })

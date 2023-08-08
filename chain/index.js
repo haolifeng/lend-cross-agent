@@ -7,6 +7,7 @@ if(!global.moduleConfig) {
 function initWanChain(){
     global.wanChain =  new WanChain(global.appLogger,global.moduleConfig.chain.nodeUrl );
 }
+
 async function getScEvents(logger, chain, scAddr, topics, fromBlk, toBlk) {
     let events;
     let cntPerTime = 50;
@@ -205,8 +206,6 @@ async function syncChain(logger, saveDb = true, syncFrom, syncTo) {
     }
 }
 
-
-exports.initWanChain = initWanChain;
-exports.getWanChain = getWanChain;
-exports.syncChain = syncChain;
-exports.getWeb3Obj = getWeb3Obj
+module.exports = {
+    initWanChain, getWanChain, syncChain, getWeb3Obj
+}

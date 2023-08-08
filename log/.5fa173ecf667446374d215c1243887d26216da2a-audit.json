@@ -1,0 +1,14 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 30
+    },
+    "auditLog": "log\\.5fa173ecf667446374d215c1243887d26216da2a-audit.json",
+    "files": [
+        {
+            "date": 1691482808176,
+            "name": "log\\lendCrossAgent.log.2023-08-08",
+            "hash": "4eb4c5c1038cde47f85196f001be7407"
+        }
+    ]
+}
