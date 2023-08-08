@@ -88,7 +88,7 @@ async function splitEvent(chainType,  events, logger) {
 
                 if (content !== null) {
 
-                  //  await global.modelOps.syncSave(...content);
+                   await global.modelOps.syncSave(...content);
                 }
                 resolve();
             } catch (err) {

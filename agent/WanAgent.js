@@ -53,7 +53,7 @@ class WanAgent {
 
         console.log('decodeEvent: ', decodeEvent);
 
-        let content = {}
+        let content = null;
         let toScAddr = [global.moduleConfig.crossLendScAddr.CrossLendMint, global.moduleConfig.crossLendScAddr.CrossLendRepay];
         let args = this.getDecodeCrossHashX(decodeEvent.args);
         let eventName = decodeEvent.event;
@@ -70,26 +70,28 @@ class WanAgent {
                 console.log('tokenPairID: ', tokenPairID);
                 let tokenPair = await this.getPairInfo(tokenPairID);
                 console.log('tokenPair is   haolifeng ---- 2000  : ', tokenPair);
+                let crossFromChainSymobl=null;
+                if(tokenPair.fromChainSymbol === this.chain.chainType){
+                    crossFromChainSymobl = tokenPair.toChainSymbol;
+                }else if(tokenPair.toChainSymbol === this.chain.chainType){
+                    crossFromChainSymobl = tokenPair.fromChainSymbol;
+                }
                 content = {
                     hashX: args.uniqueID,
-                    crossAddress: this.getDecodeCrossAddress(decodeEvent),
+                    uniqueID:args.uniqueID,
+                    crossLendScAddr: this.getDecodeCrossAddress(decodeEvent).toLowerCase(),
                     toHtlcAddr: this.getDecodeEventToHtlcAddr(decodeEvent),
                     tokenAddr: args.tokenAccount.toLowerCase(),
                     tokenPairID: tokenPairID,
+                    crossFromChainSymobl:crossFromChainSymobl,
+                    value: args.value,
+                    transactionHash: decodeEvent.transactionHash,
+                    blockNumber: decodeEvent.blockNumber,
+                    eventName:eventName,
+                    timestamp:decodeEvent.timestamp,
                 }
-
-
             }
         }
-
-        function compare(p) {
-            return function (m, n) {
-                var a = m[p];
-                var b = n[p];
-                return b - a;
-            }
-        }
-
         this.logger.debug("********************************** 0: getDecodeEventDbData ********************************** eventName:", eventName, decodeEvent.transactionHash);
         this.logger.debug('***********************************1: getDecodeEventDbData ********************************** content: ', content);
         return content;
