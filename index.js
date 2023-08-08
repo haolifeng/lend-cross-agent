@@ -16,7 +16,7 @@ let { syncChain } = require('./chain');
 
 
 const {
-    sleep
+    sleep,getGlobalWanChain
 } = require('./comm/lib')
 
 

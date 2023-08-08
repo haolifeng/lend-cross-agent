@@ -3,9 +3,7 @@ if(!global.moduleConfig) {
 }
 
 let Contract = require("../contract/Contract.js");
-let {
-    getWanChain,getWeb3Obj
-} = require('../chain')
+
 
 let {
     sleep,

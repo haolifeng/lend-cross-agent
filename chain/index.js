@@ -65,7 +65,7 @@ function getWeb3Obj(chainType){
     return new Web3Obj(global.appLogger, chainType, chainConfig.nodeUrl);
 
 }
-async function splitEvent( events, logger) {
+async function splitEvent(chainType,  events, logger) {
     let multiEvents = [...events].map((event) => {
         return new Promise(async (resolve, reject) => {
             try {

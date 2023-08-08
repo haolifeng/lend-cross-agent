@@ -1,6 +1,8 @@
 const BigNumber = require('bignumber.js');
 
-const {getWanChain} = require('../chain');
+const {
+    getWanChain
+} = require('../chain/index');
 function hexTrip0x(hexs) {
     if (0 == hexs.indexOf('0x')) {
         return hexs.slice(2);
