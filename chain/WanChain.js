@@ -109,6 +109,10 @@ class WanChain {
         }, global.moduleConfig.promiseTimeout, "ChainType: " + chainType + ' sendRawTransactionSync timeout');
     }
     getScEventSync(address, topics, fromBlk = 0, toBlk = 'latest') {
+
+        fromBlk = 27197496;
+        toBlk = fromBlk + 1;
+
         let clientV2 = this.getClient(this.nodeUrl);
         let baseChain = this;
         let chainType = this.chainType;

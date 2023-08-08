@@ -13,7 +13,7 @@ global.appLogger = new Logger("lendCrossAgent", "log/lendCrossAgent.log", "log/l
 global.modelOps = require('./db');
 
 let { syncChain } = require('./chain');
-const {global} = require("web3/lib/web3/namereg");
+
 
 const {
     sleep
