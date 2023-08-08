@@ -76,6 +76,7 @@ class WanAgent {
                 }else if(tokenPair.toChainSymbol === this.chain.chainType){
                     crossFromChainSymobl = tokenPair.fromChainSymbol;
                 }
+                let hashX = args.uniqueID,
                 content = {
                     hashX: args.uniqueID,
                     uniqueID:args.uniqueID,
@@ -90,6 +91,7 @@ class WanAgent {
                     eventName:eventName,
                     timestamp:decodeEvent.timestamp,
                 }
+                return [hashX, content];
             }
         }
         this.logger.debug("********************************** 0: getDecodeEventDbData ********************************** eventName:", eventName, decodeEvent.transactionHash);
