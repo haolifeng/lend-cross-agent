@@ -86,8 +86,8 @@ class WanAgent {
                     tokenPairID: tokenPairID,
                     crossFromChainSymobl:crossFromChainSymobl,
                     value: args.value,
-                    transactionHash: decodeEvent.transactionHash,
-                    blockNumber: decodeEvent.blockNumber,
+                    eventTxHash: decodeEvent.transactionHash,
+                    eventBlockNumber: decodeEvent.blockNumber,
                     eventName:eventName,
                     timestamp:decodeEvent.timestamp,
                 }

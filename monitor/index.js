@@ -22,15 +22,20 @@ async function monitorRecord(record, logger) {
     switch (txType) {
         case 0:
             console.log('type0 ')
+            break;
         case 1:
             console.log('type1')
+            break;
         case 2:
             console.log('type2')
             let handler = new HandlerTxType2(record, txInfo, logger);
             ret = await handler.handler(admin);
             if(ret && ret.status === 1){
-
+                global.modelOps.updateDocument(global.modelOps.eventModel,{xHash: record.hashX}, {status: "finish",
+                    lendTxhash: ret.hash,
+                    eventBlockNumber:ret.BlockNumber});
             }
+            break;
 
         default:
             logger.info('the txtype is not support, txType: ', txType);

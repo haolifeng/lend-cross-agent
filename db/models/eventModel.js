@@ -50,10 +50,12 @@ const eventSchema = new Schema({
     value: {
         type: String,
     },
-    transactionHash: {
+    eventTxHash:{type: String,},
+    eventBlockNumber:{type: Number},
+    lendTxhash: {
         type: String,
     },
-    blockNumber: {
+    lendTxblockNumber: {
         type: Number
     },
     eventName:{
