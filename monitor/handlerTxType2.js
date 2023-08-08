@@ -1,4 +1,6 @@
 const HandlerTxTypeBase = require('./handlerTxTypeBase');
+
+const { Type2TxParserObj } = require('./scObj');
 class HandlerTxType2 extends HandlerTxTypeBase{
     constructor(record, txInfo) {
         super(record, txInfo);
@@ -48,6 +50,10 @@ class HandlerTxType2 extends HandlerTxTypeBase{
             s:td.s
 
         }
+        let txInputType = this.getInputMethodType();
+        let inputType = global.moduleConfig.inputType[txInputType];
+
+
     }
 }
 module.exports = HandlerTxType2;
