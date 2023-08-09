@@ -1,6 +1,8 @@
 const InputDataDecoder = require('ethereum-input-data-decoder');
 
 const abi_crosProxy = require('../abi/abi.CrossDelegate.json');
+
+const { CrossCheckObj} = require('./scObj/index')
 class HandlerTxTypeBase {
     constructor(record, txInfo,logger) {
         this.record = record;
@@ -22,6 +24,7 @@ class HandlerTxTypeBase {
         const result = decoder.decodeData(data);
         return result.method;
     }
+
 }
 
 module.exports = HandlerTxTypeBase;

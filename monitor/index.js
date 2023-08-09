@@ -4,6 +4,8 @@ const HandlerTxType2 = require('./handlerTxType2');
 const HandlerTxType1 = require('./handlerTxType1');
 const HandlerTxType0 = require('./handlerTxType0');
 
+const { checkUniqeID } = require('./handlerCrossCheck');
+
 const admin = require('../wallets')
 global.handlingList = {};
 async function monitorRecord(record, logger) {
@@ -11,6 +13,14 @@ async function monitorRecord(record, logger) {
     try {
         const fromChainType = record.crossFromChainSymobl;
         const txHash = record.uniqueID;
+
+        let isFinish = await checkUniqeID(record.uniqueID);
+        if(isFinish){
+            global.modelOps.updateDocument(global.modelOps.eventModel, {xHash: record.hashX}, {
+                status: "finish"
+            });
+            return;
+        }
 
         let web3Obj = getWeb3Obj(fromChainType);
 

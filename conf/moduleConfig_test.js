@@ -27,19 +27,18 @@ let config = {
         crossScAbi: require('../abi/abi.CrossDelegate.json'),
         tokenManagerAddr: '0x017aB6485fF91C1A0a16B90E71f92B935B7213d3',
         tokenManagerAbi: require('../abi/abi.TokenManagerDelegate.json'),
-
-        Type0TxParser0Abi: require('../abi/Type0TxParser_abi.json'),
-        Type1TxParser1Abi:require('../abi/Type1TxParser_abi.json'),
-        Type2TxParser2Abi:require('../abi/Type2TxParser_abi.json')
-
     },
     crossLendScAddr:{
         "CrossCheck": "0x500378578469FBf43C5708942eF53EE3cB378B0c",
+        CrossCheckABI:require('../abi/CrossCheck_abi.json'),
         "CrossLendMint": "0x5Ad8Cb6baA0899Fdf9179b80984cA3cAC75DC51c",
         "CrossLendRepay": "0x0C027b777a5d74E04687040c1EFe5B0e7c6A53c3",
         "Type0TxParser": "0xDD73e460b35BdE8ef2A742790C3555E3162E39fB",
+        Type0TxParser0Abi: require('../abi/Type0TxParser_abi.json'),
         "Type1TxParser": "0x20703C269c78381a868173CEF6a18C8BAA55C026",
-        "Type2TxParser": "0x1d7Dd466a9B07593430e760b58F63fd2DDAbEB9A"
+        Type1TxParser1Abi:require('../abi/Type1TxParser_abi.json'),
+        "Type2TxParser": "0x1d7Dd466a9B07593430e760b58F63fd2DDAbEB9A",
+        Type2TxParser2Abi:require('../abi/Type2TxParser_abi.json')
     },
     crossInfoDict:{
         ETH: {

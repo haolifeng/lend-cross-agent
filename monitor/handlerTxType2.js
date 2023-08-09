@@ -7,7 +7,7 @@ class HandlerTxType2 extends HandlerTxTypeBase{
         super(record, txInfo, logger);
         this.scAddr = global.moduleConfig.crossLendScAddr.Type2TxParser;
         this.nodeUlr = global.moduleConfig.chain.nodeUrl;
-        this.abi = global.moduleConfig.CONTRACT.Type2TxParser2Abi;
+        this.abi = global.moduleConfig.crossLendScAddr.Type2TxParser2Abi;
         this.txParser = new Type2TxParserObj(this.scAddr, this.nodeUlr, this.abi);
     }
     async handler(wallet){
