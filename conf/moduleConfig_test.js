@@ -23,19 +23,15 @@ let config = {
             "userLock":1,"userBurn":2
     },
     CONTRACT: {
-        crossControlScAddr: '0x8c70c8dFEb272C725b52f4374e3931589cAAB01E',
-        crossControlScAbi: require('../abi/abi.CrossControlDelegate.json'),
         crossScAddr: '0x62dE27e16f6f31d9Aa5B02F4599Fc6E21B339e79',
         crossScAbi: require('../abi/abi.CrossDelegate.json'),
-        oracleAddr: '0x27933A9b0A5c21B838843d7601B6e0b488122AE9',
-        oracleAbi: require('../abi/abi.OracleDelegate.json'),
-        quotaAddr: '0x7585c2ae6a3F3B2998103cB7040F811B550C9930',
-        quotaAbi: require('../abi/abi.QuotaDelegate.json'),
         tokenManagerAddr: '0x017aB6485fF91C1A0a16B90E71f92B935B7213d3',
         tokenManagerAbi: require('../abi/abi.TokenManagerDelegate.json'),
-        multicallScAddr: '0x14095a721Dddb892D6350a777c75396D634A7d97',
-        configurationScAddr: '0x7F06174214F037588126962cfDA6fD7FF4455B07',
-        configurationScAbi: require('../abi/abi.CrossConfig.json')
+
+        Type0TxParser0Abi: require('../abi/Type0TxParser_abi.json'),
+        Type1TxParser1Abi:require('../abi/Type1TxParser_abi.json'),
+        Type2TxParser2Abi:require('../abi/Type2TxParser_abi.json')
+
     },
     crossLendScAddr:{
         "CrossCheck": "0x500378578469FBf43C5708942eF53EE3cB378B0c",
@@ -51,6 +47,16 @@ let config = {
                 "chainID": "2147483708",
                 "transChainID": "5"
             },
+        AVAX:{
+            "nodeUrl": "https://api.avax-test.network/ext/bc/C/rpc",
+            "chainID": "2147492648",
+            "transChainID": "43113"
+        },
+        MOONBEAM:{
+            "nodeUrl": "https://moonbeam-alpha.api.onfinality.io/public",
+            "chainID": "1073741825",
+            "transChainID": "1287"
+        }
 
     }
 }

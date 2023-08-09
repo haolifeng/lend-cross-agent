@@ -19,6 +19,8 @@
   "homepage": "https://github.com/haolifeng/js-lendCross-agent#readme",
   "dependencies": {
     "bip44-constants": "latest",
+    "ethereum-input-data-decoder": "^0.4.2",
+    "ethers": "^5.0.0",
     "mongoose": "^5.0.0",
     "optimist": "^0.6.1",
     "solc": "^0.8.21",

@@ -1,0 +1,62 @@
+2023-08-08 16:20:08,106 lendCrossAgent INFO ********************************** syncChain ********************************** WAN
+2023-08-08 16:20:08,210 lendCrossAgent INFO Connecting to database lendcross is successful!
+2023-08-08 16:20:10,039 lendCrossAgent DEBUG ChainType: WAN getBlockNumberSync successfully with result:  27265740
+2023-08-08 16:20:10,045 lendCrossAgent INFO syncChain::Current block is: 27265740 WAN
+2023-08-08 16:20:10,066 lendCrossAgent DEBUG Synchronously getScannedBlockNumber ()
+2023-08-08 16:20:10,068 lendCrossAgent INFO syncChain::Current Chain WAN sync will start from block: 27165740, saveDb: true
+2023-08-08 16:20:10,069 lendCrossAgent INFO syncChain::blockSync chain  WAN saveDb  true range: From 27165740  to 27265728  remain  99988 , current round FromBlk: 27165740 , ToBlk: 27167740
+2023-08-08 16:20:11,201 lendCrossAgent INFO events length:  WAN 2
+2023-08-08 16:20:11,770 lendCrossAgent INFO syncChain::events chainType WAN saveDb true length 2
+2023-08-08 16:20:11,801 lendCrossAgent DEBUG ********************************** 0: getDecodeEventDbData ********************************** eventName: SmgRelease 0xc33b3abd468efec44394fb48167081d4fd9455738f852d7f6244705ef6191e63
+2023-08-08 16:20:11,810 lendCrossAgent DEBUG ***********************************1: getDecodeEventDbData ********************************** content:  null
+2023-08-08 16:20:11,831 lendCrossAgent DEBUG WanAgent -- getPairInfo, tokenPairID  2
+2023-08-08 16:20:11,833 lendCrossAgent DEBUG WanChain getTokenPairInfo: pairId:  2
+2023-08-08 16:20:13,441 lendCrossAgent DEBUG Result {
+  fromChainID: '2153201998',
+  fromAccount: '0x0000000000000000000000000000000000000000',
+  toChainID: '2147483708',
+  toAccount: '0xdd22d37d976648071277306fbf4883cb21ea86c6'
+}
+2023-08-08 16:20:14,532 lendCrossAgent DEBUG wanAgent -- getPairInfo, tokenPair:  Result {
+  fromChainID: '2153201998',
+  fromAccount: '0x0000000000000000000000000000000000000000',
+  toChainID: '2147483708',
+  toAccount: '0xdd22d37d976648071277306fbf4883cb21ea86c6',
+  ancestorAccount: '0x0000000000000000000000000000000000000000',
+  ancestorName: 'wanchain',
+  ancestorSymbol: 'WAN',
+  ancestorDecimals: '18',
+  ancestorChainID: '2153201998',
+  tokenCrossType: 0
+}
+2023-08-08 16:20:14,574 lendCrossAgent DEBUG ********************************** splitEvent done ********************************** WAN
+2023-08-08 16:20:14,579 lendCrossAgent INFO ********************************** syncChain::saveState ********************************** WAN 27167740
+2023-08-08 16:20:14,581 lendCrossAgent INFO syncChain::blockSync chain  WAN saveDb  true range: From 27165740  to 27265728  remain  97988 , current round FromBlk: 27167740 , ToBlk: 27169740
+2023-08-08 16:20:15,133 lendCrossAgent INFO events length:  WAN 2
+2023-08-08 16:20:17,172 lendCrossAgent INFO syncChain::events chainType WAN saveDb true length 2
+2023-08-08 16:20:17,190 lendCrossAgent DEBUG ********************************** 0: getDecodeEventDbData ********************************** eventName: SmgRelease 0xc33b3abd468efec44394fb48167081d4fd9455738f852d7f6244705ef6191e63
+2023-08-08 16:20:17,206 lendCrossAgent DEBUG ***********************************1: getDecodeEventDbData ********************************** content:  null
+2023-08-08 16:20:17,240 lendCrossAgent DEBUG WanAgent -- getPairInfo, tokenPairID  2
+2023-08-08 16:20:17,243 lendCrossAgent DEBUG WanChain getTokenPairInfo: pairId:  2
+2023-08-08 16:20:17,835 lendCrossAgent DEBUG Result {
+  fromChainID: '2153201998',
+  fromAccount: '0x0000000000000000000000000000000000000000',
+  toChainID: '2147483708',
+  toAccount: '0xdd22d37d976648071277306fbf4883cb21ea86c6'
+}
+2023-08-08 16:20:19,969 lendCrossAgent DEBUG wanAgent -- getPairInfo, tokenPair:  Result {
+  fromChainID: '2153201998',
+  fromAccount: '0x0000000000000000000000000000000000000000',
+  toChainID: '2147483708',
+  toAccount: '0xdd22d37d976648071277306fbf4883cb21ea86c6',
+  ancestorAccount: '0x0000000000000000000000000000000000000000',
+  ancestorName: 'wanchain',
+  ancestorSymbol: 'WAN',
+  ancestorDecimals: '18',
+  ancestorChainID: '2153201998',
+  tokenCrossType: 0
+}
+2023-08-08 16:20:20,005 lendCrossAgent DEBUG ********************************** splitEvent done ********************************** WAN
+2023-08-08 16:20:20,012 lendCrossAgent INFO ********************************** syncChain::saveState ********************************** WAN 27169740
+2023-08-08 16:20:20,013 lendCrossAgent INFO syncChain::blockSync chain  WAN saveDb  true range: From 27165740  to 27265728  remain  95988 , current round FromBlk: 27169740 , ToBlk: 27171740
+2023-08-08 16:20:20,576 lendCrossAgent INFO events length:  WAN 2

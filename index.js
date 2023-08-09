@@ -20,7 +20,7 @@ const {
     sleep,
     getGlobalWanChain
 } = require('./comm/lib')
-
+const { monitorHandler } = require('./monitor')
 
 async function handlerMain(logger) {
     while(1){
@@ -39,7 +39,7 @@ async function  main(){
     try{
 
         syncWanChain(global.appLogger);
-        //handlerMain(global.appLogger);
+        handlerMain(global.appLogger);
     }catch (e) {
         global.appLogger.error("main start,e: ", e);
         process.exit(0);

@@ -3,12 +3,21 @@
         "days": true,
         "amount": 30
     },
+<<<<<<< HEAD
     "auditLog": "log/.5fa173ecf667446374d215c1243887d26216da2a-audit.json",
     "files": [
         {
             "date": 1691463121472,
             "name": "log/lendCrossAgent.log.2023-08-08",
             "hash": "5c584a6630ab3326584eb9ae868acd08"
+=======
+    "auditLog": "log\\.5fa173ecf667446374d215c1243887d26216da2a-audit.json",
+    "files": [
+        {
+            "date": 1691482808176,
+            "name": "log\\lendCrossAgent.log.2023-08-08",
+            "hash": "4eb4c5c1038cde47f85196f001be7407"
+>>>>>>> 6c51c80df469047a523db55d7864e8c5c9a02ffe
         }
     ]
 }
