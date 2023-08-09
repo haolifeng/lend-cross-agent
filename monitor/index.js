@@ -7,39 +7,56 @@ const HandlerTxType0 = require('./handlerTxType0');
 const admin = require('../wallets')
 global.handlingList = {};
 async function monitorRecord(record, logger) {
-    const fromChainType = record.crossFromChainSymobl;
-    const txHash = record.uniqueID;
 
-    let web3Obj = getWeb3Obj(fromChainType);
+    try {
+        const fromChainType = record.crossFromChainSymobl;
+        const txHash = record.uniqueID;
 
-    let txInfo = await web3Obj.getTransaction(txHash);
-    if(!txInfo){
-        return;
+        let web3Obj = getWeb3Obj(fromChainType);
+
+        let txInfo = await web3Obj.getTransaction(txHash);
+        if (!txInfo) {
+            return;
+        }
+
+        const txType = txInfo.type;
+        let ret;
+        switch (txType) {
+            case 0:
+                console.log('type0 ')
+                break;
+            case 1:
+                console.log('type1')
+                break;
+            case 2:
+                console.log('type2')
+                let handler = new HandlerTxType2(record, txInfo, logger);
+                ret = await handler.handler(admin);
+                if (ret && ret.status === 1) {
+                    global.modelOps.updateDocument(global.modelOps.eventModel, {xHash: record.hashX}, {
+                        status: "finish",
+                        lendTxhash: ret.hash,
+                        eventBlockNumber: ret.BlockNumber
+                    });
+                }
+                break;
+
+            default:
+                logger.info('the txtype is not support, txType: ', txType);
+        }
+        if(global.handlingList[record.hashX]){
+            logger.debug("global.handlingList delete already handled hashX", record.hashX);
+            delete global.handlingList[record.hashX];
+        }
+    }catch (e) {
+        if (global.handlingList[record.hashX]) {
+            logger.debug("global.handlingList delete already handled hashX", record.hashX);
+            delete global.handlingList[record.hashX];
+        }
+        logger.error(e);
     }
 
-    const txType = txInfo.type;
-    let ret;
-    switch (txType) {
-        case 0:
-            console.log('type0 ')
-            break;
-        case 1:
-            console.log('type1')
-            break;
-        case 2:
-            console.log('type2')
-            let handler = new HandlerTxType2(record, txInfo, logger);
-            ret = await handler.handler(admin);
-            if(ret && ret.status === 1){
-                global.modelOps.updateDocument(global.modelOps.eventModel,{xHash: record.hashX}, {status: "finish",
-                    lendTxhash: ret.hash,
-                    eventBlockNumber:ret.BlockNumber});
-            }
-            break;
 
-        default:
-            logger.info('the txtype is not support, txType: ', txType);
-    }
 
 
 
