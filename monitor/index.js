@@ -19,6 +19,10 @@ async function monitorRecord(record, logger) {
             global.modelOps.updateDocument(global.modelOps.eventModel, {xHash: record.hashX}, {
                 status: "finish"
             });
+            if (global.handlingList[record.hashX]) {
+                logger.debug("global.handlingList delete already handled hashX", record.hashX);
+                delete global.handlingList[record.hashX];
+            }
             return;
         }
 
@@ -26,33 +30,44 @@ async function monitorRecord(record, logger) {
 
         let txInfo = await web3Obj.getTransaction(txHash);
         if (!txInfo) {
+            if (global.handlingList[record.hashX]) {
+                logger.debug("global.handlingList delete already handled hashX", record.hashX);
+                delete global.handlingList[record.hashX];
+            }
             return;
         }
 
         const txType = txInfo.type;
         let ret;
+        let hander;
         switch (txType) {
             case 0:
-                console.log('type0 ')
+                handler = new HandlerTxType0((record, txInfo, logger));
                 break;
             case 1:
-                console.log('type1')
+                handler = new HandlerTxType1((record, txInfo, logger));
                 break;
             case 2:
-                console.log('type2')
-                let handler = new HandlerTxType2(record, txInfo, logger);
-                ret = await handler.handler(admin);
-                if (ret && ret.status === 1) {
-                    global.modelOps.updateDocument(global.modelOps.eventModel, {xHash: record.hashX}, {
-                        status: "finish",
-                        lendTxhash: ret.hash,
-                        eventBlockNumber: ret.BlockNumber
-                    });
-                }
+                 handler = new HandlerTxType2(record, txInfo, logger);
                 break;
-
             default:
                 logger.info('the txtype is not support, txType: ', txType);
+                hander = null;
+        }
+        if(!handler){
+            if (global.handlingList[record.hashX]) {
+                logger.debug("global.handlingList delete already handled hashX", record.hashX);
+                delete global.handlingList[record.hashX];
+            }
+            return;
+        }
+        ret = await handler.handler(admin);
+        if (ret && ret.status === 1) {
+            global.modelOps.updateDocument(global.modelOps.eventModel, {xHash: record.hashX}, {
+                status: "finish",
+                lendTxhash: ret.hash,
+                eventBlockNumber: ret.BlockNumber
+            });
         }
         if(global.handlingList[record.hashX]){
             logger.debug("global.handlingList delete already handled hashX", record.hashX);

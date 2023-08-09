@@ -34,11 +34,11 @@ let config = {
         "CrossLendMint": "0x5Ad8Cb6baA0899Fdf9179b80984cA3cAC75DC51c",
         "CrossLendRepay": "0x0C027b777a5d74E04687040c1EFe5B0e7c6A53c3",
         "Type0TxParser": "0xDD73e460b35BdE8ef2A742790C3555E3162E39fB",
-        Type0TxParser0Abi: require('../abi/Type0TxParser_abi.json'),
+        Type0TxParserAbi: require('../abi/Type0TxParser_abi.json'),
         "Type1TxParser": "0x20703C269c78381a868173CEF6a18C8BAA55C026",
-        Type1TxParser1Abi:require('../abi/Type1TxParser_abi.json'),
+        Type1TxParserAbi:require('../abi/Type1TxParser_abi.json'),
         "Type2TxParser": "0x1d7Dd466a9B07593430e760b58F63fd2DDAbEB9A",
-        Type2TxParser2Abi:require('../abi/Type2TxParser_abi.json')
+        Type2TxParserAbi:require('../abi/Type2TxParser_abi.json')
     },
     crossInfoDict:{
         ETH: {
