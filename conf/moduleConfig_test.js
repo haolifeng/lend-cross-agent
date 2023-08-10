@@ -29,16 +29,18 @@ let config = {
         tokenManagerAbi: require('../abi/abi.TokenManagerDelegate.json'),
     },
     crossLendScAddr:{
-        "CrossCheck": "0x500378578469FBf43C5708942eF53EE3cB378B0c",
         CrossCheckABI:require('../abi/CrossCheck_abi.json'),
-        "CrossLendMint": "0x5Ad8Cb6baA0899Fdf9179b80984cA3cAC75DC51c",
-        "CrossLendRepay": "0x0C027b777a5d74E04687040c1EFe5B0e7c6A53c3",
-        "Type0TxParser": "0xDD73e460b35BdE8ef2A742790C3555E3162E39fB",
         Type0TxParserAbi: require('../abi/Type0TxParser_abi.json'),
-        "Type1TxParser": "0x20703C269c78381a868173CEF6a18C8BAA55C026",
         Type1TxParserAbi:require('../abi/Type1TxParser_abi.json'),
-        "Type2TxParser": "0x1d7Dd466a9B07593430e760b58F63fd2DDAbEB9A",
-        Type2TxParserAbi:require('../abi/Type2TxParser_abi.json')
+        Type2TxParserAbi:require('../abi/Type2TxParser_abi.json'),
+
+        "CrossCheck": "0x82640eCC1E638b9C3Cab7D663E34e05C308c1697",
+        "CrossLendMint": "0xD24f200C4C847C5afd05244D210837b4e74dC146",
+        "CrossLendRepay": "0x9F04c7e80297fCa5a3D77D28Ecaa561d4825b3c5",
+        "Type0TxParser": "0x9065BA060aC1A94795155b76d1C724FAD457EeC5",
+        "Type1TxParser": "0x287851866f99C9A4f4a8B8d0385a1Ec924172298",
+        "Type2TxParser": "0xB3FCC2e4d5d853936b109AcDB56C7a1C46d0FA9A"
+
     },
     crossInfoDict:{
         ETH: {
