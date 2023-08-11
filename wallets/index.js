@@ -1,5 +1,6 @@
+const config = require('../config/moduleConfig');
 const ethers  = require('ethers');
-const words = ""
+const words = config.wallet.words;
 
 
 let admin = ethers.Wallet.fromMnemonic(words);

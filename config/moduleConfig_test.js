@@ -1,5 +1,8 @@
 
 let config = {
+    wallet:{
+        words: "deer funny trip dress siren crane build stomach thunder setup yellow audit",
+    },
     logServerUrl: '127.0.0.1',
     logServerPort: global.dev ? 1516 : 1514,
     dbUrl : `mongodb://127.0.0.1:27017` + '/lendcross',
