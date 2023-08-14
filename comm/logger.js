@@ -12,7 +12,7 @@ require('winston-syslog').Syslog;
 const {
   logServerUrl,
   logServerPort
-} = require('../conf/moduleConfig.js');
+} = require('../config/moduleConfig.js');
 
 /**
  * logger support 4 level

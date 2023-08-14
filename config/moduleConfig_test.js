@@ -8,6 +8,7 @@ let config = {
     dbUrl : `mongodb://127.0.0.1:27017` + '/lendcross',
 
     promiseTimeout: 300 * 1000,
+    INTERVAL_TIME: 10 * 1000,
     chain:{
         nodeUrl:'https://nodes-testnet.wandevs.org/wan',
         chainID: "2153201998",

@@ -9,15 +9,18 @@ const { checkUniqeID } = require('./handlerCrossCheck');
 const admin = require('../wallets')
 global.handlingList = {};
 async function monitorRecord(record, logger) {
+    logger.debug('monitorRecord ----- record: ', record);
 
     try {
         const fromChainType = record.crossFromChainSymobl;
         const txHash = record.uniqueID;
-
+        logger.debug('monitorRecord ----- record.uniqueID: ', record.uniqueID);
         let isFinish = await checkUniqeID(record.uniqueID);
+        logger.debug("monitorRecord --- the record is : ", isFinish)
+
         if(isFinish){
             global.modelOps.updateDocument(global.modelOps.eventModel, {xHash: record.hashX}, {
-                status: "finish"
+                status: "finished"
             });
             if (global.handlingList[record.hashX]) {
                 logger.debug("global.handlingList delete already handled hashX", record.hashX);
@@ -61,10 +64,10 @@ async function monitorRecord(record, logger) {
             }
             return;
         }
-        ret = await handler.handler(admin);
+        //ret = await handler.handler(admin);
         if (ret && ret.status === 1) {
             global.modelOps.updateDocument(global.modelOps.eventModel, {xHash: record.hashX}, {
-                status: "finish",
+                status: "finished",
                 lendTxhash: ret.hash,
                 eventBlockNumber: ret.BlockNumber
             });

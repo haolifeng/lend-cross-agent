@@ -48,8 +48,15 @@ class CrossCheckObj {
         return  ret
     }
     async checkUniqeID(uniqueID){
-        let ret = await this.scInst.checkUniqueID(uniqueID);
-        return ret;
+        try{
+            console.log('in chrossCheckObj --- uniqueID', uniqueID);
+            let ret = await this.scInst.checkUniqeID(uniqueID);
+            console.log('in chrossCheckObj --- , ret: ', ret);
+            return ret;
+        }catch (e) {
+            console.log('e: ',e);
+        }
+
     }
     async setUniqueIDFinished(wallet, uniqueID){
         let singer = wallet.connect(this.provider);

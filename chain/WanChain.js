@@ -110,8 +110,10 @@ class WanChain {
     }
     getScEventSync(address, topics, fromBlk = 0, toBlk = 'latest') {
 
-        fromBlk = 27197496;
-        toBlk = fromBlk + 1;
+        //fromBlk = 27197496;
+        //toBlk = fromBlk + 1;
+        this.log.debug("wanchain getScEventSync: address:", address, "topic: ", topics, " fromBlk: ", fromBlk, ", toBlk: ", toBlk);
+
 
         let clientV2 = this.getClient(this.nodeUrl);
         let baseChain = this;

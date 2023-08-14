@@ -4,7 +4,7 @@ global.loglevel = 'debug';
 
 
 
-global.moduleConfig = require('./conf/moduleConfig.js');
+global.moduleConfig = require('./config/moduleConfig.js');
 
 const Logger = require('./comm/logger.js');
 
@@ -29,7 +29,7 @@ async function handlerMain(logger) {
     }
 }
 async function syncWanChain(logger){
-    const chainType = "WAN";
+
     while(1){
         await syncChain(logger);
         await sleep(global.moduleConfig.INTERVAL_TIME);
@@ -38,7 +38,7 @@ async function syncWanChain(logger){
 async function  main(){
     try{
 
-        syncWanChain(global.appLogger);
+        //syncWanChain(global.appLogger);
         handlerMain(global.appLogger);
     }catch (e) {
         global.appLogger.error("main start,e: ", e);
