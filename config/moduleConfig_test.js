@@ -1,7 +1,7 @@
 
 let config = {
     wallet:{
-        words: "deer funny trip dress siren crane build stomach thunder setup yellow audit",
+        words: "",
     },
     logServerUrl: '127.0.0.1',
     logServerPort: global.dev ? 1516 : 1514,
