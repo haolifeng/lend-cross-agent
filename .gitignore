@@ -79,6 +79,13 @@ web_modules/
 .env.production.local
 .env.local
 
+# Administrator wallet credentials are supplied via the environment only.
+# If you must keep a local override file, use this path (never *.example).
+config/moduleConfig_local.js
+*.keystore
+*.pem
+*.key
+
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 .parcel-cache

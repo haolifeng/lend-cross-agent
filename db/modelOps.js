@@ -110,6 +110,26 @@ class ModelOps {
     });
   }
 
+  /**
+   * Flip one event to `finished`, but only when it is not finished yet
+   * (compare-and-set). This is what actually closes the state machine.
+   *
+   * Returns true when THIS call performed the transition, false when the record
+   * was already finished by someone else — the caller must treat false as a
+   * duplicate-execution alarm.
+   */
+  async markEventFinished(hashX, extra) {
+    if (!hashX) {
+      return await Promise.reject(new Error('markEventFinished: hashX is required'));
+    }
+    const content = Object.assign({}, extra, { status: 'finished' });
+    const doc = await this.dbAccess.syncUpdateDocumentNoUpsert(
+      this.eventModel,
+      { hashX: hashX, status: { $ne: 'finished' } },
+      content);
+    return !!doc;
+  }
+
   async getEventHistory(option) {
     try {
       let result = await this.dbAccess.syncFindDocument(this.eventModel, option);

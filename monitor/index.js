@@ -6,26 +6,44 @@ const HandlerTxType0 = require('./handlerTxType0');
 
 const { checkUniqeID } = require('./handlerCrossCheck');
 
-const admin = require('../wallets')
+const { getAdminWallet } = require('../wallets')
 global.handlingList = {};
+
+function releaseHandling(logger, hashX) {
+    if (hashX && global.handlingList[hashX]) {
+        logger.debug("global.handlingList delete already handled hashX", hashX);
+        delete global.handlingList[hashX];
+    }
+}
+
 async function monitorRecord(record, logger) {
     logger.debug('monitorRecord ----- record: ', record);
 
     try {
+        if (!record || !record.hashX) {
+            logger.error('monitorRecord: record without hashX, skipped');
+            return;
+        }
+        const hashX = record.hashX;
         const fromChainType = record.crossFromChainSymobl;
         const txHash = record.uniqueID;
+
+        if (!fromChainType) {
+            logger.error('monitorRecord: missing crossFromChainSymobl, hashX: ', hashX);
+            releaseHandling(logger, hashX);
+            return;
+        }
         logger.debug('monitorRecord ----- record.uniqueID: ', record.uniqueID);
+
+        // Fail closed: checkUniqeID throws on RPC/contract errors, and this try
+        // block turns that into "release and skip", never into "not finished".
         let isFinish = await checkUniqeID(record.uniqueID);
         logger.debug("monitorRecord --- the record is : ", isFinish)
 
         if(isFinish){
-            global.modelOps.updateDocument(global.modelOps.eventModel, {xHash: record.hashX}, {
-                status: "finished"
-            });
-            if (global.handlingList[record.hashX]) {
-                logger.debug("global.handlingList delete already handled hashX", record.hashX);
-                delete global.handlingList[record.hashX];
-            }
+            // NOTE: the filter field is `hashX`, not `xHash`.
+            await global.modelOps.markEventFinished(hashX);
+            releaseHandling(logger, hashX);
             return;
         }
 
@@ -33,55 +51,45 @@ async function monitorRecord(record, logger) {
 
         let txInfo = await web3Obj.getTransaction(txHash);
         if (!txInfo) {
-            if (global.handlingList[record.hashX]) {
-                logger.debug("global.handlingList delete already handled hashX", record.hashX);
-                delete global.handlingList[record.hashX];
-            }
+            releaseHandling(logger, hashX);
             return;
         }
 
         const txType = txInfo.type;
         let ret;
-        let hander;
+        let handler;   // WAS: `hander` typo creating an implicit global
         switch (txType) {
             case 0:
-                handler = new HandlerTxType0((record, txInfo, logger));
+                handler = new HandlerTxType0(record, txInfo, logger);
                 break;
             case 1:
-                handler = new HandlerTxType1((record, txInfo, logger));
+                handler = new HandlerTxType1(record, txInfo, logger);
                 break;
             case 2:
                  handler = new HandlerTxType2(record, txInfo, logger);
                 break;
             default:
                 logger.info('the txtype is not support, txType: ', txType);
-                hander = null;
+                handler = null;
         }
         if(!handler){
-            if (global.handlingList[record.hashX]) {
-                logger.debug("global.handlingList delete already handled hashX", record.hashX);
-                delete global.handlingList[record.hashX];
-            }
+            releaseHandling(logger, hashX);
             return;
         }
-        //ret = await handler.handler(admin);
+        //ret = await handler.handler(getAdminWallet());
         if (ret && ret.status === 1) {
-            global.modelOps.updateDocument(global.modelOps.eventModel, {xHash: record.hashX}, {
-                status: "finished",
+            const claimed = await global.modelOps.markEventFinished(hashX, {
                 lendTxhash: ret.hash,
-                eventBlockNumber: ret.BlockNumber
+                eventBlockNumber: ret.blockNumber,
             });
+            if (!claimed) {
+                logger.error('record was already finished by someone else, possible double execution, hashX: ', hashX);
+            }
         }
-        if(global.handlingList[record.hashX]){
-            logger.debug("global.handlingList delete already handled hashX", record.hashX);
-            delete global.handlingList[record.hashX];
-        }
+        releaseHandling(logger, hashX);
     }catch (e) {
-        if (global.handlingList[record.hashX]) {
-            logger.debug("global.handlingList delete already handled hashX", record.hashX);
-            delete global.handlingList[record.hashX];
-        }
-        logger.error(e);
+        releaseHandling(logger, record && record.hashX);
+        logger.error('monitorRecord error: ', e);
     }
 
 
@@ -116,8 +124,11 @@ async function monitorHandler(logger) {
             }
             global.handlingList[record.hashX] = cur;
             try{
-                monitorRecord(record, logger);
+                // MUST be awaited: without it exceptions never reach this
+                // try/catch and every record is retried forever in parallel.
+                await monitorRecord(record, logger);
             }catch (err){
+                releaseHandling(logger, record.hashX);
                 logger.error("monitorRecord err: ", err)
             }
 

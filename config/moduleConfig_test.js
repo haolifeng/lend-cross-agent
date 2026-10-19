@@ -1,8 +1,7 @@
 
+// SECURITY: no credentials here. The administrator wallet is loaded from the
+// process environment (AGENT_PRIVATE_KEY / AGENT_MNEMONIC), see wallets/index.js.
 let config = {
-    wallet:{
-        words: "",
-    },
     logServerUrl: '127.0.0.1',
     logServerPort: global.dev ? 1516 : 1514,
     dbUrl : `mongodb://127.0.0.1:27017` + '/lendcross',

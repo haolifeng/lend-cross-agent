@@ -3,6 +3,11 @@ let config = {
     logServerPort: global.dev ? 1516 : 1514,
     dbUrl : `mongodb://127.0.0.1:27017` + '/lendcross',
     promiseTimeout: 300 * 1000,
+
+    // Interval between two monitoring rounds. MUST stay > 0, otherwise the main
+    // loop degrades into a busy loop hammering the RPC nodes and the database.
+    INTERVAL_TIME: 10 * 1000,
+
     chain:{
         nodeUrl:'https://nodes.wandevs.org/wan',
         chainID: "2153201998",

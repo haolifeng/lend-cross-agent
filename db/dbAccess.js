@@ -82,6 +82,28 @@ class DbAccess {
     }, global.moduleConfig.promiseTimeout, "syncUpdateDocument timeout");
   }
 
+  /**
+   * Update WITHOUT upsert. Existing methods above use `upsert: true`, which
+   * turns a mistyped filter into a newly inserted junk document. The state
+   * machine must never create documents, so it uses this variant.
+   */
+  syncUpdateDocumentNoUpsert(model, filter, content) {
+    let log = this.log;
+    return new TimeoutPromise((resolve, reject) => {
+      model.findOneAndUpdate(filter, content, {
+        upsert: false,
+        new: true
+      }, (err, doc) => {
+        if (err) {
+          log.error("syncUpdateDocumentNoUpsert failed", (err && err.message) ? err.message : err);
+          reject(err);
+        } else {
+          resolve(doc);
+        }
+      });
+    }, global.moduleConfig.promiseTimeout, "syncUpdateDocumentNoUpsert timeout");
+  }
+
   findDocumentOne(model, filter, callback) {
     let log = this.log;
     model.findOne(filter, function(err, result) {

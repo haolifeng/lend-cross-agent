@@ -47,16 +47,29 @@ class CrossCheckObj {
         let ret = await this.scInst.getCTokenAddr(tokenPairID);
         return  ret
     }
+    /**
+     * Replay guard. FAIL CLOSED: every failure (bad input, RPC error, contract
+     * revert) rethrows so the caller must abort the record. Never return
+     * undefined here — the caller treats falsy as "not finished yet" and would
+     * execute the cross transaction again.
+     */
     async checkUniqeID(uniqueID){
-        try{
-            console.log('in chrossCheckObj --- uniqueID', uniqueID);
-            let ret = await this.scInst.checkUniqeID(uniqueID);
-            console.log('in chrossCheckObj --- , ret: ', ret);
-            return ret;
-        }catch (e) {
-            console.log('e: ',e);
+        if (typeof uniqueID !== 'string' || !/^0x[0-9a-fA-F]{64}$/.test(uniqueID)) {
+            throw new Error(`checkUniqeID: invalid uniqueID "${uniqueID}"`);
         }
 
+        let ret;
+        try{
+            ret = await this.scInst.checkUniqeID(uniqueID);
+        }catch (e) {
+            const reason = (e && e.message) ? e.message : e;
+            throw new Error(`checkUniqeID(${uniqueID}) failed, aborting: ${reason}`);
+        }
+
+        if (typeof ret !== 'boolean') {
+            throw new Error(`checkUniqeID(${uniqueID}) returned unexpected value: ${ret}`);
+        }
+        return ret;
     }
     async setUniqueIDFinished(wallet, uniqueID){
         let singer = wallet.connect(this.provider);

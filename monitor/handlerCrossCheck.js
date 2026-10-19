@@ -1,11 +1,19 @@
-const {CrossCheckObj} = require("./scObj");
+const { CrossCheckObj } = require("./scObj");
 
-let crossCheckObj = new CrossCheckObj(global.moduleConfig.crossLendScAddr.CrossCheck, global.moduleConfig.chain.nodeUrl, global.moduleConfig.crossLendScAddr.CrossCheckABI);
+const moduleConfig = global.moduleConfig || require('../config/moduleConfig');
 
+let crossCheckObj = new CrossCheckObj(
+    moduleConfig.crossLendScAddr.CrossCheck,
+    moduleConfig.chain.nodeUrl,
+    moduleConfig.crossLendScAddr.CrossCheckABI);
+
+/**
+ * Replay guard, fail closed. Any error propagates to the caller; the caller
+ * MUST stop processing this record instead of treating the failure as
+ * "not finished yet".
+ */
 async function checkUniqeID(uniquID){
-    console.log('in handlerCrossCheck.checkUniqeID --- uniquID ', uniquID );
-    let ret = await crossCheckObj.checkUniqeID(uniquID);
-    return ret;
+    return await crossCheckObj.checkUniqeID(uniquID);
 }
 
 module.exports = {
